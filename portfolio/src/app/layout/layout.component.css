@@ -1,0 +1,5 @@
+#layout { display: flex; height: 100%; }
+
+#canvas { width: 40%; }
+
+#content { width: 60%; }
