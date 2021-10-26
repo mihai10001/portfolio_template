@@ -2,8 +2,3 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
-/* Perfect Scrollbar CSS */
-.ps.ps--scrolling-y > .ps__rail-y {
-    background-color: transparent !important;
-}
