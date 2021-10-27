@@ -1,0 +1,56 @@
+<mat-tab-group mat-stretch-tabs [(selectedIndex)]="activeTabIndex" animationDuration="300ms">
+  <mat-tab label="Home">
+    <h2 class="m-1 my-4">Home</h2>
+    <div class="row g-0">
+      <app-mat-card class="col-12 col-md-4 p-1 cursor-pointer"
+        *ngFor="let section of contentSections | keyvalue: keepOrder" 
+        [title]="section.key" [subtitle]="section.value">
+      </app-mat-card>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="{{ i === 0 ? 'Projects': '...'}}"
+    *ngFor="let projectTab of projectTabsIterator(); let i = index">
+    <h2 class="m-1 my-4">Projects</h2>
+    <div class="row g-0">
+      <app-mat-card class="col-12 col-md-6 p-1"
+        *ngFor="let project of projects.personalProjects"
+          [title]="project.title"
+          [subtitle]="project.description"
+          [content]="project.content"
+          [imgSrc]="project.imgSrc"
+          [demoButtonLink]="project.demoButtonLink"
+          [gitButtonLink]="project.gitButtonLink"
+          [customButtonLink]="project.buttonLink"
+          [customButtonText]="project.buttonText"
+          [tags]="project.tags"
+          [disabled]="project.disabled">
+      </app-mat-card>
+
+      <app-mat-card class="col-12 col-md-6 p-1 cursor-pointer" (click)="goToNextTab()">
+        <div class="h-100 d-flex justify-content-center align-items-center">
+          <mat-icon>navigate_next</mat-icon>
+        </div>
+      </app-mat-card>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="Side projects">
+    <h2 class="m-1 my-4">Startups</h2>
+    <div class="row g-0">
+      <app-mat-card class="col-12 col-md-6 p-1"
+        *ngFor="let project of projects.sideProjects"
+          [title]="project.title"
+          [subtitle]="project.description"
+          [content]="project.content"
+          [imgSrc]="project.imgSrc"
+          [demoButtonLink]="project.demoButtonLink"
+          [gitButtonLink]="project.gitButtonLink"
+          [customButtonLink]="project.buttonLink"
+          [customButtonText]="project.buttonText"
+          [tags]="project.tags"
+          [disabled]="project.disabled">
+      </app-mat-card>
+    </div>
+  </mat-tab>
+</mat-tab-group>
