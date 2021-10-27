@@ -1,0 +1,18 @@
+.my-card {
+    border: 1px solid lightgray;
+    border-radius: 0px;
+    height: 100%;
+}
+
+.my-card.disabled {
+    filter: invert(0.05);
+}
+
+.my-card:not([class*=mat-elevation-z]) {
+    box-shadow: none;
+}
+
+.my-card-content {
+    padding: 0 16px;
+}
+
