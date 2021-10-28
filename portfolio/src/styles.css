@@ -2,3 +2,23 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Material Overrides */
+button.mat-button {
+    border-radius: 0px;
+}
+
+.mat-chip.mat-standard-chip {
+    font-size: 12px;
+    min-height: 24px;
+}
+
+.mat-tab-group.mat-primary .mat-ink-bar {
+    height: 1px;
+    background-color: gray;
+}
+
+.mat-tab-labels > .mat-tab-label {
+    justify-content: start;
+    padding-left: 0.25rem;
+}
