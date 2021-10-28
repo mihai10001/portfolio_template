@@ -19,6 +19,8 @@ export class MatCardComponent implements OnInit {
   @Input() customButtonText: string = '';
 
   @Input() tags: string[] = [];
+
+  @Input() hasGradientBorder: boolean = false;
   @Input() disabled: boolean = false;
 
   expanded: boolean = false;
