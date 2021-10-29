@@ -1,27 +1,45 @@
-#layout { 
-    width: 100%; 
-    height: 100%; 
-    position: relative; 
-    overflow: hidden; 
+.background {
+    width: 100%;
+    height: 100%;
+    padding: 5% 7% 5% 7%;
+    background: gainsboro;
 }
 
-#content { 
+@media only screen and (max-height: 719px) {
+    .background {
+        padding: 2%;
+    }
+}
+
+.layout {
+    position: relative;
+    overflow: hidden;
+
+    width: 100%;
+    height: 100%;
+    box-shadow: 8px 10px 25px -5px rgba(0, 0, 0, 0.2);
+    /* filter: invert(); */
+}
+
+.content { 
     position: absolute;
     z-index: 2;
 
+    height: 100%;
     width: 60%;
-    height: 90%;
-    right: 20px;
-    margin-top: 50px;
+    right: 0px;
+    border-radius: 0px;
     
-    border-radius: 15;
-    background-color: rgba(37, 63, 141, 0.075);
-    box-shadow: inset 6px 0px 15px 2px rgba(0,0,0,0.42);
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(5px);
 }
 
 @media only screen and (max-width: 992px) {
-    #content {
-        right: 0px;
+    .content {
         width: 100%;
+        /* height: 70%; */
+
+        bottom: 5px;
+        padding: 10px;
     }
 }
