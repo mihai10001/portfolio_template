@@ -1,10 +1,11 @@
-import { AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
-
-import { Inject} from "@angular/core";
-import { DOCUMENT } from '@angular/common';
+import { Component, AfterViewInit, ViewChild, ElementRef, HostListener, Renderer2 } from '@angular/core';
 
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { GlitchPass } from 'three/examples/jsm/postprocessing/GlitchPass.js';
+
 
 @Component({
   selector: 'app-layout',
@@ -14,80 +15,150 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 export class LayoutComponent implements  AfterViewInit {
 
   @ViewChild('canvas') canvas: ElementRef;
-  threeScene = new THREE.Scene();
-  threeRenderer = new THREE.WebGLRenderer();
-  threeCamera = new THREE.PerspectiveCamera( 75, 0, 0.1, 1000 );
+  threeScene;
+  threeRenderer;
+  threeCamera;
+  threeComposer;
 
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private renderer: Renderer2
-  ) { }
+  canvasHeight: number = 0;
+  canvasWidth: number = 0;
 
+  helpers: boolean = false;
+  postProcessing: boolean = false;
+  orbitalControls: boolean = false;
 
-  @HostListener('wheel', ['$event'])
-  public onWheel(event) {
-    if (event.deltaY < 0) {
-      this.threeCamera.position.z -= 1;
-    }
-    else if (event.deltaY > 0) {
-      this.threeCamera.position.z += 1;
-    }
-  }
+  whiteColor: number =  0xFFFFFF;
+  objectColor: number = 0xFF55555;
+  zCameraOffset: number = 30;
+  xObjectOffset: number = -30;
 
-  @HostListener('window:resize', ['$event'])
-  onWindowResize(){
-    this.threeCamera.aspect = window.innerWidth / window.innerHeight;
-    this.threeCamera.updateProjectionMatrix();
-    this.threeRenderer.setSize(window.innerWidth, window.innerHeight);
-  }
+  constructor(private renderer: Renderer2) { }
 
   ngAfterViewInit(): void {
-    this.threeCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-    this.threeRenderer.setSize(window.innerWidth, window.innerHeight);
+    this.initThree(75, 0, 0.1, 1000);
+    this.setCanvasProperties(this.whiteColor, this.zCameraOffset);
     this.renderer.appendChild(this.canvas.nativeElement, this.threeRenderer.domElement);
-    this.threeCamera.position.z = 20;
 
-
-    const geometry = new THREE.BoxGeometry(5, 5, 5);
-    const material = new THREE.MeshStandardMaterial({ color: 0xFF55555 });
-    const cube = new THREE.Mesh(geometry, material);
-    cube.position.set(-10, 0, 0);
-    this.threeScene.add(cube);
-
-    const pointLight = new THREE.PointLight(0xfffffff);
-    pointLight.position.set(5, 5, 5);
-
-    const ambientLight = new THREE.AmbientLight(0xffffff);
-    this.threeScene.add(pointLight, ambientLight);
-
-    // const lightHelper = new THREE.PointLightHelper(pointLight)
-    // const gridHelper = new THREE.GridHelper(200, 50);
-    // this.threeScene.add(lightHelper, gridHelper);
-
-    // const controls = new OrbitControls(this.threeCamera, this.threeRenderer.domElement);
-    // controls.enablePan = false;
-    // controls.enableRotate = false;
-
-    Array(400).fill(0).forEach(() => this.addStar(this.threeScene));
+    this.addLights(5, 5, 5, this.whiteColor, this.helpers);
+    const cube = this.addCube(5, 5, 5, this.objectColor, this.xObjectOffset);
+    const starContainers = this.addStars(400);
+  
+    this.helpers && this.addGridHelper(200, 50);
+    this.postProcessing && this.enablePostProcessing();
+    this.orbitalControls && this.enableOrbitalControls();
 
     const animate = () => {
-      requestAnimationFrame( animate );
+      requestAnimationFrame(animate);
+
       cube.rotation.x += 0.01;
       cube.rotation.y += 0.01;
-      this.threeRenderer.render(this.threeScene, this.threeCamera);
-    };
+      for(let i = 0; i < starContainers.length; i++)
+        starContainers[i].rotation.y += 0.0001;
 
+      !this.postProcessing && this.threeRenderer.render(this.threeScene, this.threeCamera);
+      this.postProcessing && this.threeComposer.render(this.threeScene, this.threeCamera);
+    };
+  
     animate();
   }
 
-  addStar(scene) {
-    const geometry = new THREE.SphereGeometry(0.25, 24, 24);
-    const material = new THREE.MeshStandardMaterial({color: 0xffffff});
+
+  @HostListener('window:resize', ['$event'])
+  onWindowResize() {
+    if (this.canvas.nativeElement) {
+      this.setCanvasProperties(this.whiteColor, this.zCameraOffset);
+    }
+  }
+
+
+  initThree(fov: number, aspect: number, near: number, far: number) {
+    this.threeScene = new THREE.Scene();
+    this.threeRenderer = new THREE.WebGLRenderer();
+    this.threeCamera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+    this.threeComposer = new EffectComposer(this.threeRenderer);
+  }
+
+
+  setCanvasProperties(canvasBackgroundColor: number, zCameraOffset: number) {
+    this.canvasHeight = this.canvas.nativeElement.offsetHeight;
+    this.canvasWidth = this.canvas.nativeElement.offsetWidth;
+
+    this.threeCamera.aspect = this.canvasWidth / this.canvasHeight;
+    this.threeCamera.position.z = zCameraOffset;
+    this.threeCamera.updateProjectionMatrix();
+
+    this.threeRenderer.setClearColor(canvasBackgroundColor);
+    this.threeRenderer.setSize(this.canvasWidth, this.canvasHeight);
+    this.threeComposer.setSize(this.canvasWidth, this.canvasHeight);
+  }
+
+
+  addCube(cubeWidth: number, cubeHeight: number, cubeDepth: number, cubeColor: number, xCubeOffset: number) {
+    const geometry = new THREE.BoxGeometry(cubeWidth, cubeHeight, cubeDepth);
+    const material = new THREE.MeshStandardMaterial({ color: cubeColor});
+    const cube = new THREE.Mesh(geometry, material);
+    cube.position.set(xCubeOffset, 0, 0);
+    this.threeScene.add(cube);
+    return cube;
+  }
+
+
+  addStar(starWidth: number, starHeight: number, starDepth: number, starColor: number) {
+    const geometry = new THREE.SphereGeometry(starWidth, starHeight, starDepth);
+    const material = new THREE.MeshStandardMaterial({color: starColor});
     const star = new THREE.Mesh(geometry, material);
+	  const starContainer = new THREE.Object3D();
+    starContainer.position.set(0, 0,  0);
+    starContainer.add(star);
 
     const [x, y, z] = Array(3).fill(0).map(() => THREE.MathUtils.randFloatSpread(200));
     star.position.set(x, y, z);
-    scene.add(star);
+  
+    this.threeScene.add(starContainer);
+    return starContainer;
+  }
+
+
+  addStars(starCount: number) {
+    return Array(starCount).fill(0).map(() => this.addStar(0.25, 24, 24, 0x000000));
+  }
+
+
+  addLights(xLight: number, yLight: number, zLight: number, lightColor: number, helpers: boolean) {
+    const ambientLight = new THREE.AmbientLight(lightColor);
+    const pointLight = new THREE.PointLight(lightColor);
+    pointLight.position.set(xLight, yLight, zLight);
+    this.threeScene.add(pointLight, ambientLight);
+
+    helpers && this.addLightHelper(pointLight);
+
+  }
+
+
+  addLightHelper(pointLight: THREE.PointLight) {
+    const lightHelper = new THREE.PointLightHelper(pointLight);
+    this.threeScene.add(lightHelper);
+  }
+
+
+  addGridHelper(gridWidth: number, gridHeight: number) {
+    const gridHelper = new THREE.GridHelper(gridWidth, gridHeight);
+    this.threeScene.add(gridHelper);
+  }
+
+
+  enableOrbitalControls() {
+    new OrbitControls(this.threeCamera, this.threeRenderer.domElement);
+  }
+
+
+  enablePostProcessing() {
+    const renderScene = new RenderPass(this.threeScene, this.threeCamera);
+    const composer = new EffectComposer(this.threeRenderer);
+    const glitchPass = new GlitchPass();
+    composer.setSize(this.canvasWidth, this.canvasHeight);
+    composer.addPass(renderScene);
+    composer.addPass(glitchPass);
   }
 }
