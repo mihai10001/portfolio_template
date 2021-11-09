@@ -8,4 +8,5 @@ export class CardModel {
     customButtonLink: string;
     customButtonText: string;
     tags: Array<string>;
+    disabled: boolean;
 }
