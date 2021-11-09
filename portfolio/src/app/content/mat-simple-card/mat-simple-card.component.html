@@ -1,0 +1,11 @@
+<mat-card class="my-card"
+    [class.gradient-border]="hasGradientBorder"
+    [class.my-card-editable]="isEditEnabled"
+    [class.my-card-placeholder]="isPlaceholder">
+    <mat-card-header>
+        <div mat-card-avatar *ngIf="avatarMatIcon"><mat-icon>{{ avatarMatIcon }}</mat-icon></div>
+        <mat-card-title *ngIf="title">{{ title }}</mat-card-title>
+        <mat-card-subtitle *ngIf="subtitle">{{ subtitle }}</mat-card-subtitle>
+    </mat-card-header>
+    <ng-content></ng-content>
+</mat-card>

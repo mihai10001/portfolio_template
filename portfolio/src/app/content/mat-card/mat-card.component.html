@@ -1,4 +1,4 @@
-<mat-card class="my-card" [class.gradient-border]="hasGradientBorder" [class.disabled]="disabled">
+<mat-card class="my-card" [class.disabled]="disabled">
     <mat-card-header class="justify-content-between">
         <div mat-card-avatar *ngIf="avatarMatIcon">
             <mat-icon>{{ avatarMatIcon }}</mat-icon>
@@ -6,8 +6,8 @@
         <mat-card-title *ngIf="title">{{ title }}</mat-card-title>
         <mat-card-subtitle *ngIf="subtitle">{{ subtitle }}</mat-card-subtitle>
         <button mat-button *ngIf="content" (click)="toggleExpandedContent()" class="float-right">
-            <ng-container *ngIf="!expanded">More<mat-icon>expand_more</mat-icon></ng-container>
-            <ng-container *ngIf="expanded">Less<mat-icon>expand_less</mat-icon></ng-container>
+            <ng-container *ngIf="!expanded"><mat-icon>expand_more</mat-icon></ng-container>
+            <ng-container *ngIf="expanded"><mat-icon>expand_less</mat-icon></ng-container>
         </button>
     </mat-card-header>
 
