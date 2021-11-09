@@ -22,3 +22,30 @@ button.mat-button {
     justify-content: start;
     padding-left: 0.25rem;
 }
+
+/* My Card CSS */
+.my-card {
+    height: 100%;
+    border: 1px solid lightgray;
+    border-radius: 0px;
+}
+
+.my-card.disabled {
+    filter: invert(0.05);
+}
+
+.my-card:not([class*=mat-elevation-z]) {
+    box-shadow: none;
+}
+
+.my-card-content {
+    padding: 0 16px;
+}
+
+.my-card-editable {
+    border: 1px solid green;
+}
+
+.my-card-placeholder {
+    border-style: dashed;
+}
