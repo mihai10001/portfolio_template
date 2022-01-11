@@ -4,11 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { ContentComponent } from './content/content.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
-  {
-    path: 'home',
-    component: ContentComponent
-  },
+  { path: '', component: ContentComponent, pathMatch: 'full' },
   { path: '**', redirectTo: '' }
 ];
 
