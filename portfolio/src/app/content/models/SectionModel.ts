@@ -1,4 +1,4 @@
-import { CardModel } from './CardModel';
+import { CardModel, ParagraphCardModel } from './CardModel';
 
 export class SectionModel {
     title: string;
@@ -9,5 +9,5 @@ export class SectionModel {
 
 export class SubsectionModel {
     title: string;
-    content: Array<CardModel>
+    content: Array<CardModel | ParagraphCardModel>
 }
