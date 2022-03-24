@@ -1,34 +1,32 @@
-<mat-card class="my-card" [class.disabled]="disabled">
-    <mat-card-header class="justify-content-between">
-        <div mat-card-avatar *ngIf="avatarMatIcon">
-            <mat-icon>{{ avatarMatIcon }}</mat-icon>
+<mat-card class="my-card {{ !isExpanded ? 'border-0 bg-transparent': 'mb-2 shadow-sm' }}" [class.disabled]="card.disabled">
+    <div class="cursor-pointer"  (click)="toggleExpansion()">
+        <div class="d-flex flex-sm-row flex-column">
+            <mat-card-title *ngIf="card.title" class="d-flex align-items-center">
+                <mat-icon class="shrink-icon">{{ !isExpanded ? 'expand_more' : 'expand_less' }}</mat-icon>{{ card.title }}
+            </mat-card-title>
+            <mat-card-subtitle *ngIf="card.description" class="text-truncate">{{ card.description }}</mat-card-subtitle>
         </div>
-        <mat-card-title *ngIf="title">{{ title }}</mat-card-title>
-        <mat-card-subtitle *ngIf="subtitle">{{ subtitle }}</mat-card-subtitle>
-        <button mat-button *ngIf="content" (click)="toggleExpandedContent()" class="float-right">
-            <ng-container *ngIf="!expanded"><mat-icon>expand_more</mat-icon></ng-container>
-            <ng-container *ngIf="expanded"><mat-icon>expand_less</mat-icon></ng-container>
-        </button>
-    </mat-card-header>
-
-    <mat-card-content class="my-card-content" *ngIf="content && expanded">
-        <div class="my-2">{{ content }}</div>
-        <mat-chip-list>
-            <mat-chip color="secondary" *ngFor="let tag of tags">{{ tag }}</mat-chip>
-        </mat-chip-list>
-    </mat-card-content>
-
-    <ng-content></ng-content>
-
-    <div class="d-flex">
-        <a *ngIf="gitButtonLink" href="{{ gitButtonLink }}" target="_blank" rel="noopener noreferrer">
-            <button mat-button color="primary">GitHub</button>
-        </a>
-        <a *ngIf="customButtonLink" href="{{ customButtonLink }}" target="_blank" rel="noopener noreferrer">
-            <button mat-button color="secondary">{{ customButtonText }}</button>
-        </a>
-        <a *ngIf="demoButtonLink" href="{{ demoButtonLink }}" target="_blank" rel="noopener noreferrer">
-            <button mat-button color="accent">Demo</button>
-        </a>
     </div>
+
+    <mat-card-content class="my-card-content" *ngIf="card.content && isExpanded">
+        <div class="my-2">{{ card.content }}</div>
+
+        <mat-chip-list>
+            <mat-chip color="secondary" *ngFor="let tag of card.tags">{{ tag }}</mat-chip>
+        </mat-chip-list>
+
+        <ng-content></ng-content>
+
+        <div class="d-flex">
+            <a *ngIf="card.gitButtonLink" href="{{ card.gitButtonLink }}" target="_blank" rel="noopener noreferrer">
+                <button mat-button color="primary">GitHub</button>
+            </a>
+            <a *ngIf="card.customButtonLink" href="{{ card.customButtonLink }}" target="_blank" rel="noopener noreferrer">
+                <button mat-button color="secondary">{{ card.customButtonText }}</button>
+            </a>
+            <a *ngIf="card.demoButtonLink" href="{{ card.demoButtonLink }}" target="_blank" rel="noopener noreferrer">
+                <button mat-button color="accent">Demo</button>
+            </a>
+        </div>
+    </mat-card-content>
 </mat-card>

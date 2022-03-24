@@ -1,0 +1,15 @@
+.mat-card-title {
+    font-size: 13px;
+    margin-bottom: 0px;
+}
+
+.mat-card-subtitle {
+    line-height: 24px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-left: 0.75rem;
+}
+
+.shrink-icon {
+    transform: scale(0.75);
+}

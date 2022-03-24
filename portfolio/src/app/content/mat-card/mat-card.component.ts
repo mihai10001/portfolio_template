@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { CardModel } from '../models/CardModel';
 
 @Component({
   selector: 'app-mat-card',
@@ -7,25 +8,12 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class MatCardComponent implements OnInit {
 
-  @Input() title: string = '';
-  @Input() subtitle: string = '';
-  @Input() avatarMatIcon: string = '';
-  @Input() content: string = '';
-  @Input() imgSrc: string = '';
-
-  @Input() gitButtonLink: string = '';
-  @Input() demoButtonLink: string = '';
-  @Input() customButtonLink: string = '';
-  @Input() customButtonText: string = '';
-
-  @Input() tags: string[] = [];
-  @Input() disabled: boolean = false;
-
-  expanded: boolean = false;
+  @Input() card: CardModel;
+  isExpanded: boolean = false;
 
   constructor() { }
 
   ngOnInit() { }
 
-  toggleExpandedContent = () => this.expanded = !this.expanded;
+  toggleExpansion = () => this.isExpanded = !this.isExpanded;
 }
