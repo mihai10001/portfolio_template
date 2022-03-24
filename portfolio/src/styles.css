@@ -2,6 +2,7 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.cursor-pointer { cursor: pointer; }
 
 /* Material Overrides */
 button.mat-button {
@@ -19,15 +20,17 @@ button.mat-button {
 }
 
 .mat-tab-labels > .mat-tab-label {
+    height: 36px;
     justify-content: start;
     padding-left: 0.25rem;
 }
 
 /* My Card CSS */
-.my-card {
-    height: 100%;
-    border: 1px solid lightgray;
+mat-card.my-card {
+    padding: 0px;
     border-radius: 0px;
+    border: 1px solid rgba(211, 211, 211, 0.3);
+    user-select: none;
 }
 
 .my-card.disabled {
@@ -40,12 +43,4 @@ button.mat-button {
 
 .my-card-content {
     padding: 0 16px;
-}
-
-.my-card-editable {
-    border: 1px solid green;
-}
-
-.my-card-placeholder {
-    border-style: dashed;
 }
