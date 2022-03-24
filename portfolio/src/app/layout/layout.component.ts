@@ -45,9 +45,9 @@ export class LayoutComponent implements  AfterViewInit {
     this.addPointLight(-5, 15, 30, 0x66FF66, 2, this.helpers);
     this.addPointLight(-20, 15, 35, 0x0066FF, 2, this.helpers);
 
-    const cube = this.addCube(5, 5, 5, this.objectColor, this.xObjectOffset);
     const starContainers = this.addStars(400);
-  
+    const objectGroup = this.addObjectGroup(this.helpers);
+
     this.helpers && this.addGridHelper(200, 50);
     this.postProcessing && this.enablePostProcessing();
     this.orbitalControls && this.enableOrbitalControls();
@@ -97,13 +97,25 @@ export class LayoutComponent implements  AfterViewInit {
     this.threeComposer.setSize(this.canvasWidth, this.canvasHeight);
   }
 
+  addObjectGroup(helpers: boolean): THREE.Group {
+    const group = new THREE.Group();
+    const sphere = new THREE.Mesh(
+      new THREE.SphereGeometry(this.sphereRadius, 32, 32),
+      new THREE.MeshBasicMaterial({ color: "gray", wireframe: true })
+    );
+    helpers && this.threeScene.add(sphere);
 
-  addCube(cubeWidth: number, cubeHeight: number, cubeDepth: number, cubeColor: number, xCubeOffset: number) {
+
+    group.position.set(this.xObjectOffset, 0, 0);
+    this.threeScene.add(group);
+    return group;
+  }
+
+  createCube(cubeWidth: number, cubeHeight: number, cubeDepth: number, cubeColor: number, xCubeOffset: number = 0) {
     const geometry = new THREE.BoxGeometry(cubeWidth, cubeHeight, cubeDepth);
-    const material = new THREE.MeshStandardMaterial({ color: cubeColor});
+    const material = new THREE.MeshStandardMaterial({ color: cubeColor });
     const cube = new THREE.Mesh(geometry, material);
     cube.position.set(xCubeOffset, 0, 0);
-    this.threeScene.add(cube);
     return cube;
   }
 
