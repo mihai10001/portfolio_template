@@ -40,7 +40,11 @@ export class LayoutComponent implements  AfterViewInit {
     this.setCanvasProperties(this.whiteColor, this.zCameraOffset);
     this.renderer.appendChild(this.canvas.nativeElement, this.threeRenderer.domElement);
 
-    this.addLights(5, 5, 5, this.whiteColor, this.helpers);
+    this.addAmbientLight(this.whiteColor, 0.6);
+    this.addPointLight(-10, -10, 35, 0xFF0066, 2, this.helpers);
+    this.addPointLight(-5, 15, 30, 0x66FF66, 2, this.helpers);
+    this.addPointLight(-20, 15, 35, 0x0066FF, 2, this.helpers);
+
     const cube = this.addCube(5, 5, 5, this.objectColor, this.xObjectOffset);
     const starContainers = this.addStars(400);
   
@@ -125,14 +129,17 @@ export class LayoutComponent implements  AfterViewInit {
   }
 
 
-  addLights(xLight: number, yLight: number, zLight: number, lightColor: number, helpers: boolean) {
-    const ambientLight = new THREE.AmbientLight(lightColor);
-    const pointLight = new THREE.PointLight(lightColor);
+  addAmbientLight(lightColor: number, intensity: number = 1) {
+    this.threeScene.add(new THREE.AmbientLight(lightColor, intensity));
+  }
+
+
+  addPointLight(xLight: number, yLight: number, zLight: number, lightColor: number, intensity: number = 1, helpers: boolean) {
+    const pointLight = new THREE.PointLight(lightColor, intensity, 50);
     pointLight.position.set(xLight, yLight, zLight);
-    this.threeScene.add(pointLight, ambientLight);
-
+    pointLight.add(new THREE.Mesh(new THREE.SphereGeometry(1, 16, 8), new THREE.MeshBasicMaterial({ color: lightColor })));
+    this.threeScene.add(pointLight);
     helpers && this.addLightHelper(pointLight);
-
   }
 
 
