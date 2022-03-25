@@ -6,6 +6,8 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { GlitchPass } from 'three/examples/jsm/postprocessing/GlitchPass.js';
 
+import { ContentService } from '../content/services/content.service';
+import { ContentModel } from '../content/models/ContentModel';
 
 @Component({
   selector: 'app-layout',
@@ -25,14 +27,18 @@ export class LayoutComponent implements  AfterViewInit {
 
   helpers: boolean = false;
   postProcessing: boolean = false;
+  isOrbitalControlsEnabled: boolean = false;
+
+  whiteColor: number = 0xFFFFFF;
+  objectColor: number = 0x5DADE2;
+  zCameraOffset: number = 50;
+  xObjectOffset: number = -13;
   orbitalControls: boolean = false;
+  content: ContentModel = this.contentService.content;
+  object3DArray: Array<{ index: number, object: THREE.Object3D, deltaDegreesToCenter: number }> = [];
 
-  whiteColor: number =  0xFFFFFF;
-  objectColor: number = 0xFF55555;
-  zCameraOffset: number = 30;
-  xObjectOffset: number = -30;
 
-  constructor(private renderer: Renderer2) { }
+  constructor(private contentService: ContentService, private renderer: Renderer2) { }
 
   ngAfterViewInit(): void {
 
