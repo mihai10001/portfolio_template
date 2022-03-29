@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { AngularEmojisModule } from 'angular-emojis';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -17,7 +18,8 @@ import { ContentModule } from './content/content.module';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    ContentModule
+    ContentModule,
+    AngularEmojisModule
   ],
   providers: [],
   bootstrap: [AppComponent]
