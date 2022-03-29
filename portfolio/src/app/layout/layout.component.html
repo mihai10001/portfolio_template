@@ -1,7 +1,15 @@
-<div class="background">
-    <div class="layout" #canvas>
-        <div class="content p-2">
+<div class="background" [class.background-dark]="selectedTheme === themes.Dark">
+    <div class="layout" [class.filter-invert]="selectedTheme === themes.Dark" #canvas>
             <ng-content></ng-content>
+        </div>
+
+        <div class="theme-toggle">
+            <button mat-mini-fab class="bg-transparent m-2" (click)="toggleTheme()">
+                <ng-container *ngIf="selectedTheme === themes.White; else darkThemeIcon">
+                    <angular-emojis name="crescent_moon" size="20"></angular-emojis>
+                </ng-container>
+                <ng-template #darkThemeIcon><angular-emojis name="sun_with_face" size="20"></angular-emojis></ng-template>
+            </button>
         </div>
     </div>
 </div>

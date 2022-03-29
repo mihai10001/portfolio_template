@@ -10,6 +10,8 @@ import { GlitchPass } from 'three/examples/jsm/postprocessing/GlitchPass.js';
 import { ContentService } from '../content/services/content.service';
 import { ContentModel } from '../content/models/ContentModel';
 
+enum Themes { White = 'White', Dark = 'Dark' }
+
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
@@ -41,6 +43,8 @@ export class LayoutComponent implements  AfterViewInit {
   content: ContentModel = this.contentService.content;
   object3DArray: Array<{ index: number, object: THREE.Object3D, deltaDegreesToCenter: number }> = [];
 
+  themes = Themes;
+  selectedTheme: keyof typeof Themes = Themes.White;
 
   constructor(private contentService: ContentService, private renderer: Renderer2) { }
 
@@ -226,5 +230,9 @@ export class LayoutComponent implements  AfterViewInit {
     composer.setSize(this.canvasWidth, this.canvasHeight);
     composer.addPass(renderScene);
     composer.addPass(glitchPass);
+  }
+
+
+  toggleTheme = () => this.selectedTheme = this.selectedTheme === Themes.White ? Themes.Dark : Themes.White;
   }
 }
