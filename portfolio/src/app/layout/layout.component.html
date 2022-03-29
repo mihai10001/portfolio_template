@@ -1,5 +1,14 @@
 <div class="background" [class.background-dark]="selectedTheme === themes.Dark">
     <div class="layout" [class.filter-invert]="selectedTheme === themes.Dark" #canvas>
+        <div class="banner text-center user-select-none">
+            <h2 class="my-2">
+                {{content.bannerTitle}}
+                <angular-emojis [name]="'wave'" size="30"></angular-emojis>
+            </h2>
+            <h5 class="lead">{{content.bannerSubtitle}}</h5>
+        </div>
+
+        <div class="content">
             <ng-content></ng-content>
         </div>
 
