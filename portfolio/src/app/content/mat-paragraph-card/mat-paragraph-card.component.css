@@ -1,0 +1,14 @@
+ul {
+    list-style: none;
+    margin-bottom: 0;
+    padding: 0 0 0 16px;
+}
+
+li {
+    font-size: 14px;
+}
+
+.link {
+    text-decoration: none;
+    color: #0d6efd;;
+}

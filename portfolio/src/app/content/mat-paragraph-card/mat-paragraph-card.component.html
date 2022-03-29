@@ -1,0 +1,23 @@
+<mat-card class="my-card">
+    <mat-card-header>
+        <mat-card-title *ngIf="card.title" class="my-1">{{ card.title }}</mat-card-title>
+        <mat-card-subtitle *ngIf="card.description">{{ card.description }}</mat-card-subtitle>
+    </mat-card-header>
+    <ul>
+        <li *ngFor="let paragraph of card.paragraphList; let i = index" class="mb-1">
+            <ng-container *ngTemplateOutlet="i < visibleParagraphs ? content : null"></ng-container>
+            <ng-container *ngTemplateOutlet="isExpanded && i >= visibleParagraphs ? content : null"></ng-container>
+            <ng-template #content>
+                <ng-container *ngIf="!paragraph.link">-&nbsp;&nbsp;{{ paragraph.content }}</ng-container>
+                <ng-container *ngIf="paragraph.link">
+                    -&nbsp;&nbsp;<a href="{{paragraph.link}}" target="_blank" class="link">{{ paragraph.content }}</a>
+                </ng-container>
+                <angular-emojis [name]="paragraph.icon" size="15" class="ml-2"></angular-emojis>
+            </ng-template>
+        </li>
+    </ul>
+    <button mat-button *ngIf="card.paragraphList.length > visibleParagraphs" (click)="toggleExpansion()"
+        style="font-size: 0.75rem">{{ !isExpanded ? 'More' : 'Less' }}
+        <mat-icon>{{ !isExpanded ? 'expand_more' : 'expand_less' }}</mat-icon>
+    </button>
+</mat-card>
