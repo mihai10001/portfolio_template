@@ -20,5 +20,12 @@
                 <ng-template #darkThemeIcon><angular-emojis name="sun_with_face" size="20"></angular-emojis></ng-template>
             </button>
         </div>
+
+        <div class="controls">
+            <button mat-mini-fab class="d-none d-lg-block bg-transparent m-2" (click)="toggleOrbitalControls()"
+                matTooltip="Enable dragging, zooming and panning on the 3D canvas with your mouse">
+                <mat-icon style="color: lightgray">{{ isOrbitalControlsEnabled ? 'lock_open' : 'lock' }}</mat-icon>
+            </button>
+        </div>
     </div>
 </div>

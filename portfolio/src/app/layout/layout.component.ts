@@ -15,13 +15,14 @@ enum Themes { White = 'White', Dark = 'Dark' }
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.css']
 })
-export class LayoutComponent implements  AfterViewInit {
+export class LayoutComponent implements AfterViewInit {
 
   @ViewChild('canvas') canvas: ElementRef;
   threeScene;
   threeRenderer;
   threeCamera;
   threeComposer;
+  orbitalControls;
 
   canvasHeight: number = 0;
   canvasWidth: number = 0;
@@ -48,7 +49,7 @@ export class LayoutComponent implements  AfterViewInit {
 
   ngAfterViewInit(): void {
 
-    this.initThree(75, 0, 0.1, 1000);
+    this.initThree(60, 0, 0.1, 1000);
     this.setCanvasProperties(this.whiteColor, this.zCameraOffset);
     this.renderer.appendChild(this.canvas.nativeElement, this.threeRenderer.domElement);
 
@@ -61,6 +62,7 @@ export class LayoutComponent implements  AfterViewInit {
     const objectGroup = this.addObjectGroup(this.helpers);
 
     this.helpers && this.addGridHelper(200, 50);
+    this.postProcessing && this.enableFog(0xe8f1fa, 20, 80);
 
     this.contentService.activeTabIndexSubject
       .subscribe(activeTabIndex =>
@@ -100,6 +102,8 @@ export class LayoutComponent implements  AfterViewInit {
     this.threeRenderer = new THREE.WebGLRenderer();
     this.threeCamera = new THREE.PerspectiveCamera(fov, aspect, near, far);
     this.threeComposer = new EffectComposer(this.threeRenderer);
+    this.orbitalControls = new OrbitControls(this.threeCamera, this.threeRenderer.domElement);
+    this.orbitalControls.enabled = this.isOrbitalControlsEnabled;
   }
 
 
@@ -170,15 +174,15 @@ export class LayoutComponent implements  AfterViewInit {
 
   addStar(starWidth: number, starHeight: number, starDepth: number, starColor: number) {
     const geometry = new THREE.SphereGeometry(starWidth, starHeight, starDepth);
-    const material = new THREE.MeshStandardMaterial({color: starColor});
+    const material = new THREE.MeshStandardMaterial({ color: starColor });
     const star = new THREE.Mesh(geometry, material);
-	  const starContainer = new THREE.Object3D();
-    starContainer.position.set(0, 0,  0);
+    const starContainer = new THREE.Object3D();
+    starContainer.position.set(0, 0, 0);
     starContainer.add(star);
 
     const [x, y, z] = Array(3).fill(0).map(() => THREE.MathUtils.randFloatSpread(200));
     star.position.set(x, y, z);
-  
+
     this.threeScene.add(starContainer);
     return starContainer;
   }
@@ -215,9 +219,16 @@ export class LayoutComponent implements  AfterViewInit {
   }
 
 
-  enableOrbitalControls() {
-    new OrbitControls(this.threeCamera, this.threeRenderer.domElement);
+  enableFog(color: number, near: number, far: number) {
+    this.threeScene.fog = new THREE.Fog(color, near, far);
   }
 
   toggleTheme = () => this.selectedTheme = this.selectedTheme === Themes.White ? Themes.Dark : Themes.White;
+
+  toggleHelpers = () => this.helpers = !this.helpers;
+
+  toggleOrbitalControls = () => {
+    this.isOrbitalControlsEnabled = !this.isOrbitalControlsEnabled;
+    this.orbitalControls.enabled = this.isOrbitalControlsEnabled;
+  }
 }
