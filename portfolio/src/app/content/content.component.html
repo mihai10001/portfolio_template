@@ -1,56 +1,41 @@
-<mat-tab-group mat-stretch-tabs [(selectedIndex)]="activeTabIndex" animationDuration="300ms">
-  <mat-tab label="Home">
-    <h2 class="m-1 my-4">Home</h2>
-    <div class="row g-0">
-      <app-mat-card class="col-12 col-md-4 p-1 cursor-pointer"
-        *ngFor="let section of contentSections | keyvalue: keepOrder" 
-        [title]="section.key" [subtitle]="section.value">
-      </app-mat-card>
-    </div>
-  </mat-tab>
+<mat-tab-group mat-stretch-tabs animationDuration="300ms" 
+  [(selectedIndex)]="activeTabIndex" (selectedIndexChange)="setTabIndex($event)"
+  >
+  <mat-tab *ngFor="let section of content.sections; let i = index" [label]="section.title">
+    <div class="my-4" *ngIf="i === 0"></div>
+    <h3 class="m-1 my-3" *ngIf="i > 0">{{ section.title }}</h3>
 
-  <mat-tab label="{{ i === 0 ? 'Projects': '...'}}"
-    *ngFor="let projectTab of projectTabsIterator(); let i = index">
-    <h2 class="m-1 my-4">Projects</h2>
-    <div class="row g-0">
-      <app-mat-card class="col-12 col-md-6 p-1"
-        *ngFor="let project of projects.personalProjects"
-          [title]="project.title"
-          [subtitle]="project.description"
-          [content]="project.content"
-          [imgSrc]="project.imgSrc"
-          [demoButtonLink]="project.demoButtonLink"
-          [gitButtonLink]="project.gitButtonLink"
-          [customButtonLink]="project.buttonLink"
-          [customButtonText]="project.buttonText"
-          [tags]="project.tags"
-          [disabled]="project.disabled">
-      </app-mat-card>
-
-      <app-mat-card class="col-12 col-md-6 p-1 cursor-pointer" (click)="goToNextTab()">
-        <div class="h-100 d-flex justify-content-center align-items-center">
-          <mat-icon>navigate_next</mat-icon>
+    <ng-container *ngIf="i === 0">
+      <div class="row g-0">
+        <div class="col-12 col-md-3 p-1"
+          *ngFor="let overviewSection of content.sections | slice:1; let tabIndex = index" (click)="goToTab(tabIndex + 1)">
+          <mat-card class="my-card" [class.gradient-border]="true">
+            <mat-card-header class="cursor-pointer shrink-header">
+              <mat-card-title>{{ overviewSection.title }}</mat-card-title>
+              <mat-card-subtitle>{{ overviewSection.description }}</mat-card-subtitle>
+            </mat-card-header>
+          </mat-card>
         </div>
-      </app-mat-card>
-    </div>
-  </mat-tab>
+      </div>
+    </ng-container>
+  
+    <ng-container *ngFor="let subsection of section.subsections">
+      <h4 class="m-1 mb-2 mt-3 lead">{{ subsection.title }}</h4>
+  
+      <div class="row g-0">
+        <ng-container *ngFor="let card of subsection.content">
+          <app-mat-card *ngIf="!card.isParagraph"
+            class="col-12 p-1"
+            [card]="card">
+          </app-mat-card>
 
-  <mat-tab label="Side projects">
-    <h2 class="m-1 my-4">Startups</h2>
-    <div class="row g-0">
-      <app-mat-card class="col-12 col-md-6 p-1"
-        *ngFor="let project of projects.sideProjects"
-          [title]="project.title"
-          [subtitle]="project.description"
-          [content]="project.content"
-          [imgSrc]="project.imgSrc"
-          [demoButtonLink]="project.demoButtonLink"
-          [gitButtonLink]="project.gitButtonLink"
-          [customButtonLink]="project.buttonLink"
-          [customButtonText]="project.buttonText"
-          [tags]="project.tags"
-          [disabled]="project.disabled">
-      </app-mat-card>
-    </div>
+          <app-mat-paragraph-card *ngIf="card.isParagraph"
+            class="col-12 p-1 mb-2"
+            [card]="card">
+          </app-mat-paragraph-card>
+
+        </ng-container>
+      </div>
+    </ng-container>
   </mat-tab>
 </mat-tab-group>

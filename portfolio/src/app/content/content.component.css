@@ -2,6 +2,6 @@ mat-tab-group {
   height: 100%;
 }
 
-.cursor-pointer {
-  cursor: pointer;
+.invert-colors {
+  filter: invert(1);
 }

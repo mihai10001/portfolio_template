@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ContentModel } from './models/ContentModel';
+import { ContentService } from './services/content.service';
 
 @Component({
   selector: 'app-content',
@@ -7,35 +9,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ContentComponent implements OnInit {
 
-  contentSections: { [sectionName: string]: string } = {
-    'Personal projects': 'Some personal projects',
-    'Side projects': 'Projects I\'ve been part of',
-    'About me': 'General information',
-    'Coding': 'I like coding',
-  };
-
-  projects: { [sectionName: string]: any[] } = {
-    personalProjects: [
-    ],
-
-    'sideProjects': [
-    ]
-  };
-
-  projectsPerTab: number = 5;
+  content: ContentModel = this.contentService.content;
   activeTabIndex: number = 0;
 
-  constructor() { }
+  constructor(private contentService: ContentService) { }
 
   ngOnInit(): void {
+    this.contentService.activeTabIndexSubject
+      .subscribe(activeTabIndex => this.activeTabIndex = activeTabIndex)
+  }
+
+  setTabIndex(index: number) {
+    this.contentService.activeTabIndexSubjectValue = index;
   }
 
   keepOrder = (a, b) => a
 
-  projectTabsIterator = () => { 
-    let maxTabs = Math.ceil(this.projects.personalProjects.length / this.projectsPerTab);
-    return Array(maxTabs).fill(0);
-  }
+  goToNextTab = () => this.activeTabIndex++
 
-  goToNextTab = () => { this.activeTabIndex++ }
+  goToTab = (tabIndex: number) => this.activeTabIndex = tabIndex
 }
