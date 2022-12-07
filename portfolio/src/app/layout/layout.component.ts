@@ -4,8 +4,6 @@ import * as THREE from 'three';
 import TWEEN from '@tweenjs/tween.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
-import { GlitchPass } from 'three/examples/jsm/postprocessing/GlitchPass.js';
 
 import { ContentService } from '../content/services/content.service';
 import { ContentModel } from '../content/models/ContentModel';
@@ -63,7 +61,6 @@ export class LayoutComponent implements  AfterViewInit {
     const objectGroup = this.addObjectGroup(this.helpers);
 
     this.helpers && this.addGridHelper(200, 50);
-    this.postProcessing && this.enablePostProcessing();
 
     this.contentService.activeTabIndexSubject
       .subscribe(activeTabIndex =>
@@ -222,17 +219,5 @@ export class LayoutComponent implements  AfterViewInit {
     new OrbitControls(this.threeCamera, this.threeRenderer.domElement);
   }
 
-
-  enablePostProcessing() {
-    const renderScene = new RenderPass(this.threeScene, this.threeCamera);
-    const composer = new EffectComposer(this.threeRenderer);
-    const glitchPass = new GlitchPass();
-    composer.setSize(this.canvasWidth, this.canvasHeight);
-    composer.addPass(renderScene);
-    composer.addPass(glitchPass);
-  }
-
-
   toggleTheme = () => this.selectedTheme = this.selectedTheme === Themes.White ? Themes.Dark : Themes.White;
-  }
 }
