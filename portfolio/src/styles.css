@@ -24,6 +24,10 @@ button.mat-button {
     justify-content: start;
     padding-left: 0.25rem;
 }
+.mat-chip {font-size: 10px}
+.mat-card-header .mat-card-title {font-size: 16px}
+.mat-card-header.shrink-header .mat-card-title {font-size: 18px; margin-bottom: 0.25rem}
+.mat-card-header.shrink-header .mat-card-subtitle {margin-bottom: 0.25rem}
 
 /* My Card CSS */
 mat-card.my-card {
