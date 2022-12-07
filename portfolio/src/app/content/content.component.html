@@ -1,6 +1,6 @@
 <mat-tab-group mat-stretch-tabs animationDuration="300ms" 
   [(selectedIndex)]="activeTabIndex" (selectedIndexChange)="setTabIndex($event)"
-  >
+  ngSwipe (swipeEnd)="onSwipeEnd($event)">
   <mat-tab *ngFor="let section of content.sections; let i = index" [label]="section.title">
     <div class="my-4" *ngIf="i === 0"></div>
     <h3 class="m-1 my-3" *ngIf="i > 0">{{ section.title }}</h3>
